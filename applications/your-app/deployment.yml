@@ -1,0 +1,38 @@
+eploymentcat /var/jenkins_home/kube/your-app/deployment.yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: your-app
+  labels:
+    app: your-app
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: your-app
+    tier: your-app
+  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: your-app
+  labels:
+    app: your-app
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: your-app
+        tier: your-app
+    spec:
+      containers:
+      - image: 034455779033.dkr.ecr.ap-southeast-1.amazonaws.com/airyrooms/your-app:latest
+        name: your-app
+        ports:
+        - containerPort: 80
+          name: your-app
